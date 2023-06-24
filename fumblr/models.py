@@ -1,7 +1,7 @@
 from flask import current_app
 from .database import db
-from .services.imgur import upload, upload_from_url
-from flask_dance.consumer.backend.sqla import OAuthConsumerMixin
+from .services.image import upload, upload_from_url
+from flask_dance.consumer.storage.sqla import OAuthConsumerMixin
 from flask_login import UserMixin, current_user, login_user, logout_user
 from datetime import datetime
 from sqlalchemy import exists, and_, or_
@@ -11,20 +11,27 @@ import os
 import re
 import random
 
-tags_posts = db.Table('tag_post_association',
-                      db.Column('tag_id', db.Integer, db.ForeignKey('tags.id')),
-                      db.Column('post_id', db.Integer, db.ForeignKey('posts.id')))
+tags_posts = db.Table(
+    "tag_post_association",
+    db.Column("tag_id", db.Integer, db.ForeignKey("tags.id")),
+    db.Column("post_id", db.Integer, db.ForeignKey("posts.id")),
+)
 
-images_posts = db.Table('image_post_association',
-                        db.Column('image_id', db.Integer, db.ForeignKey('images.id')),
-                        db.Column('post_id', db.Integer, db.ForeignKey('posts.id')))
+images_posts = db.Table(
+    "image_post_association",
+    db.Column("image_id", db.Integer, db.ForeignKey("images.id")),
+    db.Column("post_id", db.Integer, db.ForeignKey("posts.id")),
+)
 
-roles_users = db.Table('role_user_association',
-                       db.Column('user_id', db.Integer, db.ForeignKey('users.id')),
-                       db.Column('role_id', db.Integer, db.ForeignKey('roles.id')))
+roles_users = db.Table(
+    "role_user_association",
+    db.Column("user_id", db.Integer, db.ForeignKey("users.id")),
+    db.Column("role_id", db.Integer, db.ForeignKey("roles.id")),
+)
+
 
 class Image(db.Model):
-    __tablename__ = 'images'
+    __tablename__ = "images"
 
     id = db.Column(db.Integer, primary_key=True)
     image = db.Column(db.String(80), nullable=False)
@@ -39,14 +46,10 @@ class Image(db.Model):
         self.created = created
 
     def __repr__(self):
-        return '<Image {} {}>'.format(self.id, self.image)
+        return "<Image {} {}>".format(self.id, self.image)
 
     def get_data(self):
-        return {
-            'id': self.id,
-            'link': self.link,
-            'created': self.created
-        }
+        return {"id": self.id, "link": self.link, "created": self.created}
 
     @staticmethod
     def allowed_file(filename):
@@ -55,10 +58,9 @@ class Image(db.Model):
 
         """
 
-        ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif'])
+        ALLOWED_EXTENSIONS = set(["png", "jpg", "jpeg", "gif"])
 
-        return '.' in filename and \
-               filename.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS
+        return "." in filename and filename.rsplit(".", 1)[1] in ALLOWED_EXTENSIONS
 
     @classmethod
     def submit_images(cls, files):
@@ -79,9 +81,9 @@ class Image(db.Model):
             image_data = upload(f)
 
             if not image_data:
-                raise Exception('submit_images: No upload data received')
+                raise Exception("submit_images: No upload data received")
 
-            image = cls(image_data['id'], image_data['deletehash'], image_data['link'])
+            image = cls(image_data["id"], image_data["deletehash"], image_data["link"])
             images.append(image)
             db.session.add(image)
 
@@ -103,7 +105,7 @@ class Image(db.Model):
         """
 
         image_data = upload(file)
-        image = Image(image_data['id'], image_data['deletehash'], image_data['link'])
+        image = Image(image_data["id"], image_data["deletehash"], image_data["link"])
 
         db.session.add(image)
         db.session.commit()
@@ -127,7 +129,7 @@ class Image(db.Model):
         if not image_data:
             return False
 
-        image = Image(image_data['id'], image_data['deletehash'], image_data['link'])
+        image = Image(image_data["id"], image_data["deletehash"], image_data["link"])
 
         db.session.add(image)
         db.session.commit()
@@ -147,7 +149,7 @@ class Image(db.Model):
 
         """
         filename = secure_filename(file.filename)
-        image_path = os.path.join(current_app.config['UPLOAD_FOLDER'], filename)
+        image_path = os.path.join(current_app.config["UPLOAD_FOLDER"], filename)
 
         file.save(image_path)
 
@@ -163,26 +165,42 @@ class Image(db.Model):
 
         """
         filename = secure_filename(file.filename)
-        image_path = os.path.join(current_app.config['UPLOAD_FOLDER'], filename)
+        image_path = os.path.join(current_app.config["UPLOAD_FOLDER"], filename)
 
         os.remove(image_path)
 
+
 class Post(db.Model):
-    __tablename__ = 'posts'
+    __tablename__ = "posts"
 
     id = db.Column(db.Integer, primary_key=True)
     text = db.Column(db.String())
-    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
-    user = db.relationship('User', foreign_keys='Post.user_id', backref=db.backref('posts', lazy='dynamic'), uselist=False)
+    user_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
+    user = db.relationship(
+        "User",
+        foreign_keys="Post.user_id",
+        backref=db.backref("posts", lazy="dynamic"),
+        uselist=False,
+    )
 
-    images = db.relationship('Image', secondary=images_posts, backref=db.backref('posts'))
-    tags = db.relationship('Tag', secondary=tags_posts, backref=db.backref('posts', lazy='dynamic'))
+    images = db.relationship(
+        "Image", secondary=images_posts, backref=db.backref("posts")
+    )
+    tags = db.relationship(
+        "Tag", secondary=tags_posts, backref=db.backref("posts", lazy="dynamic")
+    )
 
-    reblog_user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
-    reblog_user = db.relationship('User', foreign_keys='Post.reblog_user_id', uselist=False)
+    reblog_user_id = db.Column(db.Integer, db.ForeignKey("users.id"))
+    reblog_user = db.relationship(
+        "User", foreign_keys="Post.reblog_user_id", uselist=False
+    )
 
-    reblog_post_id = db.Column(db.Integer, db.ForeignKey('posts.id'))
-    reblogs = db.relationship('Post', backref=db.backref('reblog_parent', uselist=False, remote_side=[id]), uselist=True)
+    reblog_post_id = db.Column(db.Integer, db.ForeignKey("posts.id"))
+    reblogs = db.relationship(
+        "Post",
+        backref=db.backref("reblog_parent", uselist=False, remote_side=[id]),
+        uselist=True,
+    )
 
     updated = db.Column(db.DateTime, default=datetime.utcnow)
     created = db.Column(db.DateTime, default=datetime.utcnow)
@@ -195,22 +213,22 @@ class Post(db.Model):
         self.created = created
 
     def __repr__(self):
-        return '<Post {} {}>'.format(self.id, self.user)
+        return "<Post {} {}>".format(self.id, self.user)
 
     def get_data(self):
         return {
-            'id': self.id,
-            'images': [i.get_data() for i in self.images],
-            'text': self.text or '',
-            'user': self.user.get_user_info(),
-            'likes': [l.get_data() for l in self.likes],
-            'liked': self.is_liked(),
-            'tags': [tag.name for tag in self.tags],
-            'comments': [cmt.get_data() for cmt in self.comments],
-            'created': self.created,
-            'owned': self.is_owned(),
-            'reblogs': [r.id for r in self.reblogs],
-            'reblog': self.reblog_user.get_user_info() if self.reblog_user else None
+            "id": self.id,
+            "images": [i.get_data() for i in self.images],
+            "text": self.text or "",
+            "user": self.user.get_user_info(),
+            "likes": [l.get_data() for l in self.likes],
+            "liked": self.is_liked(),
+            "tags": [tag.name for tag in self.tags],
+            "comments": [cmt.get_data() for cmt in self.comments],
+            "created": self.created,
+            "owned": self.is_owned(),
+            "reblogs": [r.id for r in self.reblogs],
+            "reblog": self.reblog_user.get_user_info() if self.reblog_user else None,
         }
 
     def reblog_post(self, tags=[], text=None):
@@ -267,7 +285,11 @@ class Post(db.Model):
         if not current_user.is_authenticated:
             return False
 
-        return db.session.query(exists().where(and_(Like.user_id == current_user.id, Like.post_id == self.id))).scalar()
+        return db.session.query(
+            exists().where(
+                and_(Like.user_id == current_user.id, Like.post_id == self.id)
+            )
+        ).scalar()
 
     def is_owned(self):
         """
@@ -311,7 +333,7 @@ class Post(db.Model):
         return [post.get_data() for post in posts]
 
     @classmethod
-    def submit_post(cls, user, images, text=None, tags='', created=None):
+    def submit_post(cls, user, images, text=None, tags="", created=None):
         """
         Create a new post and save it to the database
 
@@ -335,15 +357,20 @@ class Post(db.Model):
 
         return post
 
+
 class Like(db.Model):
-    __tablename__ = 'likes'
+    __tablename__ = "likes"
 
     id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
-    user = db.relationship('User', backref=db.backref('likes', lazy='dynamic'), uselist=False)
+    user_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
+    user = db.relationship(
+        "User", backref=db.backref("likes", lazy="dynamic"), uselist=False
+    )
 
-    post_id = db.Column(db.Integer, db.ForeignKey('posts.id'), nullable=False)
-    post = db.relationship('Post', backref=db.backref('likes', lazy='dynamic'), uselist=False)
+    post_id = db.Column(db.Integer, db.ForeignKey("posts.id"), nullable=False)
+    post = db.relationship(
+        "Post", backref=db.backref("likes", lazy="dynamic"), uselist=False
+    )
     created = db.Column(db.DateTime, default=datetime.utcnow)
 
     def __init__(self, user, post, created=None):
@@ -352,30 +379,31 @@ class Like(db.Model):
         self.created = created
 
     def __repr__(self):
-        return '<Like {} - {}>'.format(self.user, self.post)
+        return "<Like {} - {}>".format(self.user, self.post)
 
     def get_data(self):
-        return {
-            'post': self.post,
-            'user': self.user.username,
-            'created': self.created
-        }
+        return {"post": self.post, "user": self.user.username, "created": self.created}
+
 
 class User(db.Model, UserMixin):
-    __tablename__ = 'users'
+    __tablename__ = "users"
 
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(80), unique=True)
     loginname = db.Column(db.String, nullable=False)
     provider = db.Column(db.String)
-    avatar_id = db.Column(db.Integer, db.ForeignKey('images.id'))
-    avatar = db.relationship('Image', backref=db.backref('avatars', lazy='dynamic'), uselist=False)
+    avatar_id = db.Column(db.Integer, db.ForeignKey("images.id"))
+    avatar = db.relationship(
+        "Image", backref=db.backref("avatars", lazy="dynamic"), uselist=False
+    )
 
     email = db.Column(db.String(255))
     password = db.Column(db.String(255))
     active = db.Column(db.Boolean)
     confirmed_at = db.Column(db.DateTime)
-    roles = db.relationship('Role', secondary=roles_users, backref=db.backref('users', lazy='dynamic'))
+    roles = db.relationship(
+        "Role", secondary=roles_users, backref=db.backref("users", lazy="dynamic")
+    )
 
     last_login_at = db.Column(db.DateTime)
     current_login_at = db.Column(db.DateTime)
@@ -384,14 +412,13 @@ class User(db.Model, UserMixin):
     created = db.Column(db.DateTime, default=datetime.utcnow)
 
     def __init__(self, loginname, provider, created=None):
-
         self.loginname = loginname
         self.provider = provider
         self.username = User.generate_username(loginname)
         self.created = created
 
     def __repr__(self):
-        return '<User {} {}>'.format(self.id, self.username)
+        return "<User {} {}>".format(self.id, self.username)
 
     @classmethod
     def valid_username(cls, username):
@@ -399,7 +426,7 @@ class User(db.Model, UserMixin):
         Check if username contains illegal characters
 
         """
-        ALLOWED_CHARACTERS = re.compile('[a-zA-Z0-9-_]+')
+        ALLOWED_CHARACTERS = re.compile("[a-zA-Z0-9-_]+")
         return ALLOWED_CHARACTERS.match(username)
 
     @classmethod
@@ -424,7 +451,7 @@ class User(db.Model, UserMixin):
         """
         if cls.username_taken(loginname):
             rand_num = random.randrange(100, 999)
-            return '{}{}'.format(loginname, rand_num)
+            return "{}{}".format(loginname, rand_num)
         else:
             return loginname
 
@@ -434,7 +461,9 @@ class User(db.Model, UserMixin):
         Check if email conforms to a valid email pattern
 
         """
-        email_pattern = re.compile('^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$')
+        email_pattern = re.compile(
+            "^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$"
+        )
         return email_pattern.match(email)
 
     @classmethod
@@ -455,14 +484,11 @@ class User(db.Model, UserMixin):
             Password between 8 and 20 characters including any @*#$%^&* characters
 
         """
-        password_pattern = re.compile('^([a-zA-Z0-9@*#$%^&]{8,20})$')
+        password_pattern = re.compile("^([a-zA-Z0-9]{4,20})$")
         return password_pattern.match(password)
 
     def get_user_info(self):
-        return {
-            'username': self.username,
-            'avatar': self.get_avatar()
-        }
+        return {"username": self.username, "avatar": self.get_avatar()}
 
     def following_user(self, username):
         """
@@ -509,7 +535,9 @@ class User(db.Model, UserMixin):
             List of Message objects
 
         """
-        return Message.query.filter(or_(Message.target_id == self.id, Message.user_id == self.id)).all()
+        return Message.query.filter(
+            or_(Message.target_id == self.id, Message.user_id == self.id)
+        ).all()
 
     def get_avatar(self):
         """
@@ -596,14 +624,25 @@ class User(db.Model, UserMixin):
         """
         logout_user()
 
+
 class Follow(db.Model):
-    __tablename__ = 'followers'
+    __tablename__ = "followers"
 
     id = db.Column(db.Integer, primary_key=True)
-    target_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
-    target = db.relationship('User', foreign_keys='Follow.target_id', backref=db.backref('followers', lazy='dynamic'), uselist=False)
-    follower_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
-    follower = db.relationship('User', foreign_keys='Follow.follower_id', backref=db.backref('following', lazy='dynamic'), uselist=False)
+    target_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
+    target = db.relationship(
+        "User",
+        foreign_keys="Follow.target_id",
+        backref=db.backref("followers", lazy="dynamic"),
+        uselist=False,
+    )
+    follower_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
+    follower = db.relationship(
+        "User",
+        foreign_keys="Follow.follower_id",
+        backref=db.backref("following", lazy="dynamic"),
+        uselist=False,
+    )
     created = db.Column(db.DateTime, default=datetime.utcnow)
 
     def __init__(self, target_user, follower_user, created=None):
@@ -612,16 +651,14 @@ class Follow(db.Model):
         self.created = created
 
     def __repr__(self):
-        return '<Follow {} - {}>'.format(self.target, self.follower)
+        return "<Follow {} - {}>".format(self.target, self.follower)
 
     def get_data(self):
-        return {
-            'target': self.target.username,
-            'follower': self.follower.username
-        }
+        return {"target": self.target.username, "follower": self.follower.username}
+
 
 class Tag(db.Model):
-    __tablename__ = 'tags'
+    __tablename__ = "tags"
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String, unique=True, nullable=False)
@@ -632,7 +669,7 @@ class Tag(db.Model):
         self.created = created
 
     def __repr__(self):
-        return '<Tag - {}>'.format(self.name)
+        return "<Tag - {}>".format(self.name)
 
     @staticmethod
     def safe_tag(tag_string):
@@ -646,7 +683,7 @@ class Tag(db.Model):
             Returns True if string contains only allowed characters, otherwise False
 
         """
-        ALLOWED_CHARACTERS = re.compile('[a-zA-Z0-9,!?+\- ]+')
+        ALLOWED_CHARACTERS = re.compile("[a-zA-Z0-9,!?+\- ]+")
         return ALLOWED_CHARACTERS.match(tag_string)
 
     @staticmethod
@@ -664,7 +701,7 @@ class Tag(db.Model):
             A set of tag name strings.
 
         """
-        return set(' '.join(t.split()) for t in tags.lower().split(','))
+        return set(" ".join(t.split()) for t in tags.lower().split(","))
 
     @classmethod
     def get_or_create_tag(cls, name):
@@ -691,23 +728,33 @@ class Tag(db.Model):
         tag_set = cls.format_tags(tags)
         return [cls.get_or_create_tag(tag) for tag in tag_set if tag]
 
+
 class OAuth(db.Model, OAuthConsumerMixin):
-    __tablename__ = 'oauths'
+    __tablename__ = "oauths"
 
     user_id = db.Column(db.Integer, db.ForeignKey(User.id))
     user = db.relationship(User)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
 
+
 class Message(db.Model):
-    __tablename__ = 'messages'
+    __tablename__ = "messages"
 
     id = db.Column(db.Integer, primary_key=True)
-    target_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
-    target = db.relationship('User', foreign_keys='Message.target_id', backref=db.backref('messages_to', lazy='dynamic'),
-                             uselist=False)
-    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
-    user = db.relationship('User', foreign_keys='Message.user_id',
-                               backref=db.backref('messages_from', lazy='dynamic'), uselist=False)
+    target_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
+    target = db.relationship(
+        "User",
+        foreign_keys="Message.target_id",
+        backref=db.backref("messages_to", lazy="dynamic"),
+        uselist=False,
+    )
+    user_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
+    user = db.relationship(
+        "User",
+        foreign_keys="Message.user_id",
+        backref=db.backref("messages_from", lazy="dynamic"),
+        uselist=False,
+    )
     text = db.Column(db.String, nullable=False)
     read = db.Column(db.Boolean, default=False)
     created = db.Column(db.DateTime, default=datetime.utcnow)
@@ -720,11 +767,11 @@ class Message(db.Model):
 
     def get_data(self):
         return {
-            'from': self.user.username,
-            'to': self.target.username,
-            'text': self.text,
-            'read': self.read,
-            'created': self.created
+            "from": self.user.username,
+            "to": self.target.username,
+            "text": self.text,
+            "read": self.read,
+            "created": self.created,
         }
 
     @classmethod
@@ -754,14 +801,22 @@ class Message(db.Model):
 
         return message
 
+
 class Comment(db.Model):
-    __tablename__ = 'comments'
+    __tablename__ = "comments"
 
     id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
-    user = db.relationship('User', backref=db.backref('comments', lazy='dynamic'), uselist=False)
-    post_id = db.Column(db.Integer, db.ForeignKey('posts.id'), nullable=False)
-    post = db.relationship('Post', backref=db.backref('comments', lazy='joined'), uselist=False, order_by='Comment.created')
+    user_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
+    user = db.relationship(
+        "User", backref=db.backref("comments", lazy="dynamic"), uselist=False
+    )
+    post_id = db.Column(db.Integer, db.ForeignKey("posts.id"), nullable=False)
+    post = db.relationship(
+        "Post",
+        backref=db.backref("comments", lazy="joined"),
+        uselist=False,
+        order_by="Comment.created",
+    )
     text = db.Column(db.String, nullable=False)
     created = db.Column(db.DateTime, default=datetime.utcnow)
 
@@ -772,15 +827,15 @@ class Comment(db.Model):
         self.created = created
 
     def __repr__(self):
-        return '<Comment {} {}>'.format(self.user, self.text)
+        return "<Comment {} {}>".format(self.user, self.text)
 
     def get_data(self):
         return {
-            'id': self.id,
-            'user': self.user.username,
-            'post': self.post.id,
-            'text': self.text,
-            'created': self.created
+            "id": self.id,
+            "user": self.user.username,
+            "post": self.post.id,
+            "text": self.text,
+            "created": self.created,
         }
 
     @classmethod
@@ -805,11 +860,12 @@ class Comment(db.Model):
 
         return comment
 
+
 class Role(db.Model):
-    __tablename__ = 'roles'
+    __tablename__ = "roles"
 
     id = db.Column(db.Integer, primary_key=True)
-    name= db.Column(db.String(80), unique=True)
+    name = db.Column(db.String(80), unique=True)
     description = db.Column(db.String(255))
 
     def __init__(self, name, description=None):
@@ -817,7 +873,7 @@ class Role(db.Model):
         self.description = description
 
     def __repr__(self):
-        return '<Role {} {}>'.format(self.id, self.name)
+        return "<Role {} {}>".format(self.id, self.name)
 
     @classmethod
     def get_role(cls, name):

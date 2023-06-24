@@ -4,6 +4,7 @@
 
     // View messages
     $('.message-user').on('click', openUserMessages);
+
     function openUserMessages(e) {
         var user = $(this).addClass('selected').data('user');
         $('.message-user[data-user!=\'' + user + '\']').removeClass('selected');
@@ -19,6 +20,7 @@
 
     // Comment modal
     $('.comment-btn').on('click', openCommentModal);
+
     function openCommentModal() {
         var post = $(this).data('post');
 
@@ -30,6 +32,7 @@
     }
 
     $('.comment-form').on('submit', sendComment);
+
     function sendComment(e) {
         e.preventDefault();
 
@@ -51,6 +54,7 @@
 
     // Message modal
     $('.msg-btn').on('click', openMsgModal);
+
     function openMsgModal() {
         var user = $(this).data('user');
 
@@ -63,6 +67,7 @@
 
     // Send message
     $('.message-form').on('submit', sendMessage);
+
     function sendMessage(e) {
         e.preventDefault();
 
@@ -324,7 +329,7 @@
             var btn = e.currentTarget;
             var postID = btn.dataset.post;
 
-            askConfirm({ title: 'Delete post?', btn: 'Delete' }).then(function () {
+            askConfirm({title: 'Delete post?', btn: 'Delete'}).then(function () {
                 axios.get('/post/delete/' + postID).then(function (res) {
                     document.location.reload(true);
                 }).catch(function (err) {
@@ -343,6 +348,7 @@
             btn.addEventListener('click', followUser);
         });
     }
+
     function followUser(e) {
         var btn = e.currentTarget;
         var user = btn.dataset.user;
@@ -379,6 +385,7 @@
 
     // Reblog button
     $('.reblog-btn').on('click', reblogPost);
+
     function reblogPost(e) {
         var postID = $(this).data('post');
 
@@ -406,6 +413,7 @@
 
     // Mobile header-sidebar
     $('.menu-btn, .mask').on('click', openSidemenu);
+
     function openSidemenu(e) {
         $('#header-sidebar').toggleClass('open');
         $('.menu-btn').toggleClass('fa-bars').toggleClass('fa-close');

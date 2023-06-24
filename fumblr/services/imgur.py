@@ -3,7 +3,8 @@ from imgurpython import ImgurClient, helpers
 import os
 import base64
 
-API_URL = 'https://api.imgur.com/3/'
+API_URL = "https://api.imgur.com/3/"
+
 
 def get_client():
     """
@@ -16,7 +17,8 @@ def get_client():
     try:
         return ImgurClient(IMGUR_ID, IMGUR_SECRET)
     except helpers.error.ImgurClientError:
-        print(f'Error: imgur client error - id: {IMGUR_ID} secret: {IMGUR_SECRET}')
+        print(f"Error: imgur client error - id: {IMGUR_ID} secret: {IMGUR_SECRET}")
+
 
 def delete_image(deletehash):
     """
@@ -35,6 +37,7 @@ def delete_image(deletehash):
             return client.delete_image(deletehash)
         except:
             return False
+
 
 def upload_image(path):
     """
@@ -80,6 +83,7 @@ def upload_image(path):
 
         return upload
 
+
 def upload(image):
     """
     Upload image to Imgur from file
@@ -96,11 +100,8 @@ def upload(image):
     if client:
         contents = image.read()
         b64 = base64.b64encode(contents)
-        data = {
-            'image': b64,
-            'type': 'base64'
-        }
-        return client.make_request('POST', 'upload', data, True)
+        data = {"image": b64, "type": "base64"}
+        return client.make_request("POST", "upload", data, True)
 
 
 def upload_from_url(url):
@@ -119,8 +120,9 @@ def upload_from_url(url):
         try:
             return client.upload_from_url(url)
         except helpers.error.ImgurClientError:
-            print('Error: imgur client error')
+            print("Error: imgur client error")
             return False
+
 
 def get_image(id):
     """
@@ -139,4 +141,3 @@ def get_image(id):
         image_data = client.get_image(id)
 
         return image_data
-

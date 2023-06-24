@@ -7,18 +7,20 @@ from flask_admin.contrib.sqla import ModelView
 from flask_login import current_user
 from fumblr.decorators import admin_required
 
+
 class MyHomeView(AdminIndexView):
     @admin_required
-    @expose('/')
+    @expose("/")
     def index(self):
-        return self.render('admin/index.html')
+        return self.render("admin/index.html")
+
 
 class MyModelView(ModelView):
     def is_accessible(self):
         if not current_user.is_authenticated:
             return False
 
-        if current_user.has_role('superuser'):
+        if current_user.has_role("superuser"):
             return True
 
         return False
@@ -28,12 +30,10 @@ class MyModelView(ModelView):
             if current_user.is_authenticated:
                 return abort(403)
             else:
-                return redirect(url_for('login'))
+                return redirect(url_for("login"))
 
-admin = Admin(app,
-              name='fumblr',
-              template_mode='bootstrap3',
-              index_view=MyHomeView())
+
+admin = Admin(app, name="fumblr", template_mode="bootstrap3", index_view=MyHomeView())
 
 admin.add_view(MyModelView(User, db.session))
 admin.add_view(MyModelView(Post, db.session))
