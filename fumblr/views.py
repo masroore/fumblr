@@ -10,12 +10,12 @@ from flask import (
     abort,
     send_from_directory,
 )
-from fumblr import app
 from flask_login import login_required, logout_user, current_user, user_needs_refresh
-from .models import Post, User, Image, Tag, Follow, Like, Message, Comment, Role
+
+from fumblr import app
 from .database import db
 from .default_settings import DEBUG
-import os
+from .models import Post, User, Image, Tag, Follow, Like, Message, Comment, Role
 
 POST_LIMIT = 10
 
@@ -437,7 +437,7 @@ def gallery(post_count=0):
     """
     Posts of all users
     """
-    raw_posts = request.args.get("raw_posts")
+    json_data = request.args.get("json_data")
 
     posts = (
         Post.query.order_by(Post.created.desc()).offset(post_count).limit(POST_LIMIT)
@@ -450,7 +450,7 @@ def gallery(post_count=0):
 
     state = {"pages": {"post_count": offset, "more": more_posts, "loading": False}}
 
-    if raw_posts == "1":
+    if json_data == "1":
         rendered_posts = "".join(
             [render_template("component/post.html", post=post) for post in posts_data]
         )
@@ -466,7 +466,7 @@ def dashboard(post_count: int = 0):
     """
     User's private facing page
     """
-    raw_posts = request.args.get("raw_posts")
+    json_data = request.args.get("json_data")
 
     following_ids = [current_user.id]
     for uid in current_user.following.with_entities(Follow.target_id).all():
@@ -486,7 +486,7 @@ def dashboard(post_count: int = 0):
 
     state = {"pages": {"post_count": offset, "more": more_posts, "loading": False}}
 
-    if raw_posts == "1":
+    if json_data == "1":
         rendered_posts = "".join(
             [render_template("component/post.html", post=post) for post in posts_data]
         )
@@ -501,7 +501,7 @@ def user(username, post_count=0):
     """
     User's public facing page; posts and reblogs
     """
-    raw_posts = request.args.get("raw_posts")
+    json_data = request.args.get("json_data")
 
     user = User.query.filter_by(username=username).one_or_none()
     if not user:
@@ -523,7 +523,7 @@ def user(username, post_count=0):
 
     state = {"pages": {"post_count": offset, "more": more_posts, "loading": False}}
 
-    if raw_posts == "1":
+    if json_data == "1":
         rendered_posts = "".join(
             [render_template("component/post.html", post=post) for post in posts_data]
         )
@@ -683,7 +683,7 @@ def likes(post_count=0):
     """
     All posts the user liked
     """
-    raw_posts = request.args.get("raw_posts")
+    json_data = request.args.get("json_data")
 
     likes_query = (
         current_user.likes.order_by(Like.created.desc())
@@ -698,7 +698,7 @@ def likes(post_count=0):
 
     state = {"pages": {"post_count": offset, "more": more_posts, "loading": False}}
 
-    if raw_posts == "1":
+    if json_data == "1":
         rendered_posts = "".join(
             [render_template("component/post.html", post=post) for post in posts_data]
         )
@@ -709,9 +709,6 @@ def likes(post_count=0):
 
 @app.errorhandler(404)
 def page_not_found(error):
-    """
-    404 error page
-    """
     return render_template("error/404.html")
 
 
