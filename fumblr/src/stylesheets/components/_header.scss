@@ -1,0 +1,149 @@
+#header {
+	z-index: 10;
+	top: 0;
+	color: #ddd;
+	width: 100%;
+	nav {
+		background-color: $primary-color;
+		border-bottom: 1px solid rgba(0, 0, 0, .2);
+		height: 10vh;
+		padding: 0;
+		font-size: 1.5rem;
+		.fa-pencil-square-o {
+			color: $accent-color-high;
+		}
+		i:hover {
+			cursor: pointer;
+			color: #fff;
+		}
+		&.open-search {
+			.mobile-search { top: 0; }
+			.nav-icons { 
+				top: -10vh;
+				position: absolute;
+			}
+		}
+	}	
+	.screen-header { display: none; }
+	.nav-icons {
+		transition: .1s all ease;
+		padding: 1rem;
+		display: flex;
+		justify-content: space-between;
+		.logo { font-size: 1.7rem; }
+	}
+	.mobile-search { 
+		transition: .1s all ease;
+		position: absolute;
+		top: -10vh;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		.close-btn {
+			color: #aaa;
+			position: absolute;
+			height: 100%;
+			padding: 1rem; 
+			left: 0;	
+		}
+		form { height: 100%; }
+		input { 
+			background-color: rgba(0,0,0,0.2);
+			color: #eee;
+			height: 100%;	
+			width: 100%;
+			text-align: center;
+			border: none;
+		}
+	}
+
+	.user-name {
+		display: inline-block;
+		text-overflow: ellipsis;
+		overflow: hidden;
+		max-width: 10rem;
+	}
+
+	#header-sidebar {
+		transition: all .2s ease;
+		z-index: 10;
+		position: fixed;
+		right: -16rem;
+		width: 100vw;
+		height: 100vh;
+
+		a:hover {
+			color: #eee;
+		}
+		i {
+			width: 1rem;
+			margin-right: .5rem;
+		}
+		
+		.side-menu {
+			z-index: 12;
+			position: relative;
+			background-color: $primary-color;	
+			width: 16rem;
+			height: 90%;
+		}
+		.menu-item {
+			display: block;
+			padding: .75rem .5rem;
+			font-size: 1rem;
+			border-bottom: 1px solid hsla(0,0,100, 0.1);
+			&:last-child { border: none; }
+		}
+		.mask {
+			z-index: 11;
+			transition: inherit;
+			height: 100%;
+			width: 0;
+			right: 0;
+			position: absolute;
+			background-color: #000;
+			opacity: .6;
+		}
+	}
+
+	&.open-menu {
+		
+		#header-sidebar {
+			right: 0;
+			.mask { width: 100%; }
+		}
+	}	
+
+	@include media-breakpoint-up(md) {
+		nav {
+			height: 50px;
+			font-size: 2rem;
+		}
+		#header-sidebar { display: none; }
+		.mobile-header { display: none; }
+		.screen-header { display: block; }
+		.logo { 
+			margin-right: 1rem;
+			margin-top: .5rem;
+			display: inline;
+			color: #eee;
+		}
+		.nav-link {
+			margin-right: 1rem;
+		}
+
+		.search-bar {
+			display: inline;
+			position: relative;			
+			input {
+				background-color: rgba(0,0,0,0.2);
+				color: #eee;
+				margin-top: 8px;
+				display: inline;
+				max-width: 12rem;
+				text-align: left;
+				height: 35px;
+			}
+		}
+	}
+}

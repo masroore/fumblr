@@ -1,0 +1,121 @@
+.post {
+  width: 100%;
+  background-color: #eeeeee;
+  margin: 1rem auto;
+  border-radius: .2rem;
+
+  .top-bar {
+    padding: .5rem 1rem;
+    display: flex;
+    font-size: .8rem;
+    .avatar {
+      width: 64px;
+      height: 64px;
+      margin-right: 1rem;
+      overflow: hidden;
+      border-radius: 32px;
+      img { width: 100%; }
+    }
+    .user {  
+      flex-grow: 2; 
+      a { 
+        font-weight: 700; 
+        text-overflow: ellipsis;
+      }
+      .reblog { 
+        display: block;
+        color: #999; 
+      }
+    }
+    .created {
+      font-size: .7rem;
+    }
+  }
+  .images {
+    img { width: 100%; }
+  }
+  .bottom-bar {
+    padding: 1rem;
+    min-height: 3.5rem;
+    .text { 
+      margin-bottom: .5rem;
+      font-size: 20px; 
+    }
+    .tags {
+      margin-bottom: 1rem;
+      .tag{ color: #555; }
+    }
+    .post-menu {
+      i {
+        transition: .2s all ease;
+        color: hsl(0,0,30);
+        margin-left: 1rem;
+        &:hover { 
+          color: hsl(0,0,0); 
+          cursor: pointer;
+        }
+      }
+      .notes {
+        display: inline-block;
+      }
+      .like-btn {
+        &.liked { color: $red; }
+      }    
+    }
+  }
+
+  @include media-breakpoint-up(md) {
+    max-width: 600px;
+    margin: 1.5rem auto;
+    .top-bar {
+      .avatar {
+        width: 64px;
+        height: 64px;
+      }
+      .user {  
+        flex-grow: 2; 
+        font-size: 1rem;
+        a { font-weight: 700; }
+        .reblog {
+          display: inline;
+          color: #555;
+        }
+      }
+      .created {
+        font-size: 1rem;
+      }
+    }
+    .images {}
+    .bottom-bar {
+      padding: 1rem;
+      min-height: 3.5rem;
+      
+      .text { 
+        margin-bottom: .5rem;
+        font-size: 20px; 
+      }
+      .tags {
+        .tag{
+            color: #555;
+        }
+      }
+      .post-menu {
+        .notes {
+          display: inline-block;
+        }
+        font-size: 1.2rem;
+        .comment-btn,
+        .like-btn,
+        .reblog-btn {
+          transition: .2s all ease;
+          color: hsl(0,0,30);
+          margin-left: 1rem;
+          &:hover { color: hsl(0,0,0); }
+        }
+        .like-btn {
+          &.liked { color: $red; }
+        }     
+      }
+    }
+  }
+}

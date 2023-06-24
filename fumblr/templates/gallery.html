@@ -1,0 +1,15 @@
+{% extends "layout/base.html" %}
+{% block title %}Gallery{% endblock %}
+{% block content %}
+<div id="gallery">
+	<div class="gallery-wrap">
+		
+		{% include 'component/post-list.html' %}
+		
+		{% if not posts %}
+			<div class="no-content"><em>No posts to display.</em></div><!-- no-content -->
+		{% endif %}
+		
+	</div><!-- gallery-wrap -->
+</div><!-- home -->
+{% endblock %}

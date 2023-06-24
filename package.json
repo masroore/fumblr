@@ -1,0 +1,42 @@
+{
+  "name": "fumblr",
+  "version": "1.0.0",
+  "description": "A Tumblr clone made from Flask",
+  "main": "",
+  "scripts": {
+    "build": "webpack --progress --config webpack.config.prod.js && gulp build",
+    "watch": "webpack --watch --colors --progress --config webpack.config.js",
+    "sass": "gulp",
+    "deploy": "npm run build && git commit -am 'new build' && git push heroku master"
+  },
+  "author": "Joshua N. Cox <joshua.n.cox@gmail.com> (http://jonoco.me/)",
+  "license": "MIT",
+  "devDependencies": {
+    "autoprefixer": "6.5.1",
+    "axios": "0.15.2",
+    "babel-core": "6.17.0",
+    "babel-loader": "6.2.5",
+    "babel-preset-es2015": "6.14.0",
+    "bootstrap": "4.0.0-alpha.4",
+    "css-loader": "0.25.0",
+    "file-loader": "0.9.0",
+    "gulp": "3.9.1",
+    "gulp-autoprefixer": "3.1.0",
+    "gulp-clean-css": "2.0.12",
+    "gulp-rename": "1.2.2",
+    "gulp-sass": "2.3.2",
+    "gulp-uglify": "1.5.4",
+    "gulp-util": "3.0.7",
+    "jquery": "3.1.1",
+    "lodash": "4.16.4",
+    "node-sass": "3.8.0",
+    "parsleyjs": "2.5.1",
+    "postcss-loader": "1.0.0",
+    "redux": "3.6.0",
+    "sass-loader": "4.0.2",
+    "style-loader": "0.13.1",
+    "url-loader": "0.5.7",
+    "webpack": "1.13.2",
+    "webpack-dashboard": "0.2.0"
+  }
+}

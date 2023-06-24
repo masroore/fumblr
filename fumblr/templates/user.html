@@ -1,0 +1,14 @@
+{% extends "layout/blog.html" %}
+{% block title %}{{ user }}{% endblock %}
+{% block content %}
+<div id="user">
+	<div class="user-wrap">
+		<h1>{{ user }}</h1>
+
+		{% include 'component/post-list.html' %}
+
+		{% include 'component/message-modal.html' %}
+
+	</div><!-- user-wrap -->
+</div><!-- home -->
+{% endblock %}

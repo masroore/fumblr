@@ -1,0 +1,15 @@
+{% extends "layout/base.html" %}
+{% block title %}Likes{% endblock %}
+{% block content %}
+<div id="likes">
+	<div class="likes-wrap">
+		
+		{% include 'component/post-list.html' %}
+
+		{% if not posts %}
+		<div class="no-content"><em>You have not liked any posts</em></div><!-- no-content -->
+		{% endif %}
+
+	</div><!-- likes-wrap -->
+</div><!-- home -->
+{% endblock %}

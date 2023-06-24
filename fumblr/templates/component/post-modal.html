@@ -1,0 +1,60 @@
+<div class="modal fade" id="post-modal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span>&times;</span></button>
+                <h4 class="modal-title">New Post</h4>
+            </div>
+            <div class="modal-body">
+                <div class="preview"></div><!-- preview -->
+                <form class="post-form">
+                    <div class="url-upload hide">
+                        <div class="form-group">
+                            <label for="url">Image URL</label>
+                            <input class="form-control url" type="url" name="url" pattern="https?://.+" placeholder="Paste image URL here">
+                        </div><!-- form-group -->
+                    </div><!-- url-upload -->
+
+                    <div class="file-upload">
+                        <div class="droparea">
+                            <div class="dropbox"></div><!-- dropbox -->    
+                        </div><!-- dropbox-area -->
+
+                        <div class="form-group file">
+                            <label for="file">Select a photo</label>
+                            <input class="form-control" id="file" type="file" name="file">
+                        </div><!-- form-group -->
+                    </div><!-- file-upload -->
+                    
+                    <button class="switch-input">Upload photo by URL</button>
+
+			        <div class="form-group">
+				        <label for="text">Description</label>
+				        <input class="form-control text" type="text" name="text" placeholder="Description"> 
+			        </div><!-- form-group -->
+
+			        <div class="form-group">
+				        <label for="text">Tags</label>
+				        <input class="form-control tags" type="text" name="tags" placeholder="comedy, tragedy, romance, ..." 
+                            data-parsley-trigger="keyup" 
+                            data-parsley-validation-threshold="5" 
+                            pattern="[a-zA-Z0-9,!?+\- ]+"
+                            data-parsley-pattern-message="Only use letters, numbers, and characters [, ! ? + -]">
+                        <small class="form-text text-muted">Separate tags by comma.</small>
+			        </div><!-- form-group -->
+		        </form>
+                <div class="loading hide">
+                    <div class="loading-message">
+                        <i class="fa fa-spinner fa-spin fa-3x fa-fw"></i>
+                        <span class="progress">0%</span>
+                        <span class="sr-only">Loading...</span>
+                    </div><!-- loading-message -->
+                </div><!-- loading -->
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary pull-xs-left" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary submit-btn">Submit</button>
+            </div><!-- modal-footer -->
+        </div>
+    </div>
+</div>

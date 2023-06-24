@@ -1,0 +1,15 @@
+#user {
+	margin-top: 2rem;	
+	h1 {
+		text-align: center;
+		font-size: 2.5rem;
+		overflow: hidden;
+		text-overflow: hidden;
+	}
+
+	@include media-breakpoint-up(md) {
+		h1 {
+			font-size: 4rem;
+		}
+	}
+}

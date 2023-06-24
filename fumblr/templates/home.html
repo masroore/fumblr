@@ -1,0 +1,17 @@
+{% extends "layout/base.html" %}
+{% block title %}Hello{% endblock %}
+{% block content %}
+<div id="home">
+	<div class="home-wrap">
+		<h1>Fumblr</h1>
+		<p>A flask full of tumbles.</p>
+		<div class="buttons">
+			<a href="{{ url_for('register') }}" class="btn btn-secondary signup-btn">Sign up</a>
+			<a href="{{ url_for('login') }}" class="btn btn-secondary">Log in</a>
+		</div><!-- buttons -->
+		<a href="{{ url_for('gallery') }}" class="gallery-btn">
+			<i class="fa fa-globe"></i>See what others are posting
+		</a>
+	</div><!-- home-wrap -->
+</div><!-- home -->
+{% endblock %}
