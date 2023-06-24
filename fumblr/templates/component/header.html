@@ -1,107 +1,108 @@
 <header id="header">
-	<nav class="navbar mobile-header" role="navigation">
-		<div class="nav navbar-nav">
-			<div class="nav-icons">
-				<a href="{{ url_for('index') }}">
-					<i class="logo">F</i>
-				</a>	
-				<i class="fa fa-search search-btn"></i>
-				<i class="fa fa-bars menu-btn"></i>
-			</div><!-- nav-icons -->		
-			
-			<div class="mobile-search">
-				<form action="/search" class="form-inline">
-					<i class="fa fa-close close-btn" title="Close search bar"></i>
-					<input class="form-control" type="text" name="q" placeholder="Search Fumblr" />
-				</form>					
-			</div><!-- search-bar -->
-		</div><!-- nav navbar-nav -->
-	</nav><!-- navbar -->
+    <nav class="navbar mobile-header" role="navigation">
+        <div class="nav navbar-nav">
+            <div class="nav-icons">
+                <a href="{{ url_for('index') }}">
+                    <i class="logo">F</i>
+                </a>
+                <i class="fa fa-search search-btn"></i>
+                <i class="fa fa-bars menu-btn"></i>
+            </div><!-- nav-icons -->
 
-	<div id="header-sidebar">
-		<div class="side-menu pull-xs-right">
-			{% if current_user.is_authenticated %}
-			<a href="#" class="menu-item post-btn">
-				<i class="fa fa-pencil-square"></i>New Post
-			</a>
-			<a href="{{ url_for('dashboard') }}" class="menu-item">
-				<i class="fa fa-user"></i>{{ current_user.username }}
-			</a>
-			<a href="{{ url_for('gallery') }}" class="menu-item">
-				<i class="fa fa-globe"></i>Gallery
-			</a>
-			<a href="{{ url_for('message') }}" class="menu-item">
-				<i class="fa fa-envelope-o"></i>Messages
-			</a>
-			<a href="{{ url_for('following') }}" class="menu-item">
-				<i class="fa fa-star-o"></i>Following
-			</a>
-			<a href="{{ url_for('followers') }}" class="menu-item">
-				<i class="fa fa-group"></i>Followers
-			</a>
-			<a href="{{ url_for('likes') }}" class="menu-item">
-				<i class="fa fa-heart-o"></i>Likes
-			</a>
-			<a href="{{ url_for('settings') }}" class="menu-item">
-				<i class="fa fa-cog"></i>Settings
-			</a>
-			<a href="{{ url_for('logout') }}" class="menu-item">
-				<i class="fa fa-arrow-down"></i>Log out
-			</a>
-			{% else %}
-			<a href="{{ url_for('gallery') }}" class="menu-item">
-				<i class="fa fa-globe"></i>Gallery
-			</a>
-			<a href="{{ url_for('login') }}" class="menu-item">
-				<i class="fa fa-arrow-up"></i>Sign in
-			</a>
-			{% endif %}
-		</div><!-- side-menu -->
-		<div class="mask"></div><!-- mask -->
-	</div><!-- header-sidebar -->
+            <div class="mobile-search">
+                <form action="/search" class="form-inline">
+                    <i class="fa fa-close close-btn" title="Close search bar"></i>
+                    <input class="form-control" type="text" name="q" placeholder="Search Fumblr"/>
+                </form>
+            </div><!-- search-bar -->
+        </div><!-- nav navbar-nav -->
+    </nav><!-- navbar -->
 
-	<nav class="navbar screen-header" role="navigation">
-		<div class="nav navbar-nav">
-			<div class="container">
-				<div class="logo">
-					<a href="{{ url_for('index') }}" class="nav-item nav-link">Fumblr</a>
-				</div><!-- logo -->
-				<form action="/search" class="search-bar" class="form-inline">
-					<input class="form-control" type="text" name="q" placeholder="Search Fumblr" />
-				</form>
+    <div id="header-sidebar">
+        <div class="side-menu pull-xs-right">
+            {% if current_user.is_authenticated %}
+                <a href="#" class="menu-item post-btn">
+                    <i class="fa fa-pencil-square"></i>New Post
+                </a>
+                <a href="{{ url_for('dashboard') }}" class="menu-item">
+                    <i class="fa fa-user"></i>{{ current_user.username }}
+                </a>
+                <a href="{{ url_for('gallery') }}" class="menu-item">
+                    <i class="fa fa-globe"></i>Gallery
+                </a>
+                <a href="{{ url_for('message') }}" class="menu-item">
+                    <i class="fa fa-envelope-o"></i>Messages
+                </a>
+                <a href="{{ url_for('following') }}" class="menu-item">
+                    <i class="fa fa-star-o"></i>Following
+                </a>
+                <a href="{{ url_for('followers') }}" class="menu-item">
+                    <i class="fa fa-group"></i>Followers
+                </a>
+                <a href="{{ url_for('likes') }}" class="menu-item">
+                    <i class="fa fa-heart-o"></i>Likes
+                </a>
+                <a href="{{ url_for('settings') }}" class="menu-item">
+                    <i class="fa fa-cog"></i>Settings
+                </a>
+                <a href="{{ url_for('logout') }}" class="menu-item">
+                    <i class="fa fa-arrow-down"></i>Log out
+                </a>
+            {% else %}
+                <a href="{{ url_for('gallery') }}" class="menu-item">
+                    <i class="fa fa-globe"></i>Gallery
+                </a>
+                <a href="{{ url_for('login') }}" class="menu-item">
+                    <i class="fa fa-arrow-up"></i>Sign in
+                </a>
+            {% endif %}
+        </div><!-- side-menu -->
+        <div class="mask"></div><!-- mask -->
+    </div><!-- header-sidebar -->
 
-				<div class="pull-xs-right">
-					<a href="{{ url_for('gallery') }}" class="nav-item nav-link" title="Explore gallery">
-						<i class="fa fa-globe"></i>
-					</a>
+    <nav class="navbar screen-header" role="navigation">
+        <div class="nav navbar-nav">
+            <div class="container">
+                <div class="logo">
+                    <a href="{{ url_for('index') }}" class="nav-item nav-link">Fumblr</a>
+                </div><!-- logo -->
+                <form action="/search" class="search-bar" class="form-inline">
+                    <input class="form-control" type="text" name="q" placeholder="Search Fumblr"/>
+                </form>
 
-					{% if current_user.is_authenticated %}
-					<a href="{{ url_for('message') }}" class="nav-item nav-link" title="Messages">
-						<i class="fa fa-envelope-o"></i>
-					</a>
-					<div class="nav-item dropdown">
-						<i data-toggle="dropdown" class="nav-item nav-link fa fa-user" title="Account menu"></i>
-						<div class="dropdown-menu">
-							<a href="{{ url_for('dashboard') }}" class="dropdown-item">{{ current_user.username }}</a>
-							<a href="{{ url_for('settings') }}" class="dropdown-item">Settings</a>
-							<div class="dropdown-divider"></div><!-- dropdown-divider -->
-							<a href="{{ url_for('following') }}" class="dropdown-item">Following</a>
-							<a href="{{ url_for('followers') }}" class="dropdown-item">Followers</a>
-							<a href="{{ url_for('likes') }}" class="dropdown-item">Likes</a>
-							<div class="dropdown-divider"></div><!-- dropdown-divider -->
-							<a href="{{ url_for('logout') }}" class="dropdown-item">Log out</a>
-						</div><!-- dropdown-menu -->
-					</div><!-- dropdown -->
-					<a href="#" class="nav-item nav-link post-btn" title="New post">
-						<i class="fa fa-pencil-square-o"></i>
-						<!-- <span>New Post</span> -->
-					</a>
-					{% else %}
-					<a href="{{ url_for('login') }}" class="nav-item nav-link">Log in</a>
-					<a href="{{ url_for('register') }}" class="nav-item nav-link">Sign up</a>
-					{% endif %}
-				</div>
-			</div>
-		</div><!-- nav navbar-nav -->
-	</nav><!-- navbar navbar-light bg-faded -->
+                <div class="pull-xs-right">
+                    <a href="{{ url_for('gallery') }}" class="nav-item nav-link" title="Explore gallery">
+                        <i class="fa fa-globe"></i>
+                    </a>
+
+                    {% if current_user.is_authenticated %}
+                        <a href="{{ url_for('message') }}" class="nav-item nav-link" title="Messages">
+                            <i class="fa fa-envelope-o"></i>
+                        </a>
+                        <div class="nav-item dropdown">
+                            <i data-toggle="dropdown" class="nav-item nav-link fa fa-user" title="Account menu"></i>
+                            <div class="dropdown-menu">
+                                <a href="{{ url_for('dashboard') }}"
+                                   class="dropdown-item">{{ current_user.username }}</a>
+                                <a href="{{ url_for('settings') }}" class="dropdown-item">Settings</a>
+                                <div class="dropdown-divider"></div><!-- dropdown-divider -->
+                                <a href="{{ url_for('following') }}" class="dropdown-item">Following</a>
+                                <a href="{{ url_for('followers') }}" class="dropdown-item">Followers</a>
+                                <a href="{{ url_for('likes') }}" class="dropdown-item">Likes</a>
+                                <div class="dropdown-divider"></div><!-- dropdown-divider -->
+                                <a href="{{ url_for('logout') }}" class="dropdown-item">Log out</a>
+                            </div><!-- dropdown-menu -->
+                        </div><!-- dropdown -->
+                        <a href="#" class="nav-item nav-link post-btn" title="New post">
+                            <i class="fa fa-pencil-square-o"></i>
+                            <!-- <span>New Post</span> -->
+                        </a>
+                    {% else %}
+                        <a href="{{ url_for('login') }}" class="nav-item nav-link">Log in</a>
+                        <a href="{{ url_for('register') }}" class="nav-item nav-link">Sign up</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div><!-- nav navbar-nav -->
+    </nav><!-- navbar navbar-light bg-faded -->
 </header>

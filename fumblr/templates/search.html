@@ -1,42 +1,42 @@
 {% extends "layout/base.html" %}
 {% block title %}Search{% endblock %}
 {% block content %}
-<div id="search">
-	<div class="search-wrap">
-		<h1>Search</h1>
+    <div id="search">
+        <div class="search-wrap">
+            <h1>Search</h1>
 
-		{% if no_results %}
-		<div class="no-result">Sorry, no results</div>
-		{% endif %}
+            {% if no_results %}
+                <div class="no-result">Sorry, no results</div>
+            {% endif %}
 
-		{% if tag %}
-		<h3>{{ tag|replace('_', ' ') }}</h3>
-		{% elif search %}
-		<h3>{{ search }}</h3>
-		{% endif %}
+            {% if tag %}
+                <h3>{{ tag|replace('_', ' ') }}</h3>
+            {% elif search %}
+                <h3>{{ search }}</h3>
+            {% endif %}
 
-		{% if tags %}
-		<div class="tags">
-			<h4>Found {{ tags|count }} {{ 'tag' if tags|count == 1 else 'tags' }}</h4>
-			{% for tag in tags %}
-				<a href="{{ url_for('tag', tag_name=tag) }}">#{{ tag }}</a>	
-			{% endfor %}
-		</div>	
-		{% endif %}
+            {% if tags %}
+                <div class="tags">
+                    <h4>Found {{ tags|count }} {{ 'tag' if tags|count == 1 else 'tags' }}</h4>
+                    {% for tag in tags %}
+                        <a href="{{ url_for('tag', tag_name=tag) }}">#{{ tag }}</a>
+                    {% endfor %}
+                </div>
+            {% endif %}
 
-		{% if users %}
-		<div class="users">
-			<h4>Found {{ users|count }} {{ 'user' if users|count == 1 else 'users' }}</h4>
-			{% for user in users %}
-			<div class="user">
-				<a href="{{ url_for('user', username=user.username) }}">{{ user.username }}</a>
-			</div>
-			{% endfor %}
-		</div><!-- users -->
-		{% endif %}
-	</div><!-- search-wrap -->		
+            {% if users %}
+                <div class="users">
+                    <h4>Found {{ users|count }} {{ 'user' if users|count == 1 else 'users' }}</h4>
+                    {% for user in users %}
+                        <div class="user">
+                            <a href="{{ url_for('user', username=user.username) }}">{{ user.username }}</a>
+                        </div>
+                    {% endfor %}
+                </div><!-- users -->
+            {% endif %}
+        </div><!-- search-wrap -->
 
-	{% include 'component/post-list.html' %}
+        {% include 'component/post-list.html' %}
 
-</div><!-- home -->
+    </div><!-- home -->
 {% endblock %}

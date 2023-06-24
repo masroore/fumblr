@@ -11,13 +11,14 @@
                     <div class="url-upload hide">
                         <div class="form-group">
                             <label for="url">Image URL</label>
-                            <input class="form-control url" type="url" name="url" pattern="https?://.+" placeholder="Paste image URL here">
+                            <input class="form-control url" type="url" name="url" pattern="https?://.+"
+                                   placeholder="Paste image URL here">
                         </div><!-- form-group -->
                     </div><!-- url-upload -->
 
                     <div class="file-upload">
                         <div class="droparea">
-                            <div class="dropbox"></div><!-- dropbox -->    
+                            <div class="dropbox"></div><!-- dropbox -->
                         </div><!-- dropbox-area -->
 
                         <div class="form-group file">
@@ -25,24 +26,25 @@
                             <input class="form-control" id="file" type="file" name="file">
                         </div><!-- form-group -->
                     </div><!-- file-upload -->
-                    
+
                     <button class="switch-input">Upload photo by URL</button>
 
-			        <div class="form-group">
-				        <label for="text">Description</label>
-				        <input class="form-control text" type="text" name="text" placeholder="Description"> 
-			        </div><!-- form-group -->
+                    <div class="form-group">
+                        <label for="text">Description</label>
+                        <input class="form-control text" type="text" name="text" placeholder="Description">
+                    </div><!-- form-group -->
 
-			        <div class="form-group">
-				        <label for="text">Tags</label>
-				        <input class="form-control tags" type="text" name="tags" placeholder="comedy, tragedy, romance, ..." 
-                            data-parsley-trigger="keyup" 
-                            data-parsley-validation-threshold="5" 
-                            pattern="[a-zA-Z0-9,!?+\- ]+"
-                            data-parsley-pattern-message="Only use letters, numbers, and characters [, ! ? + -]">
+                    <div class="form-group">
+                        <label for="text">Tags</label>
+                        <input class="form-control tags" type="text" name="tags"
+                               placeholder="comedy, tragedy, romance, ..."
+                               data-parsley-trigger="keyup"
+                               data-parsley-validation-threshold="5"
+                               pattern="[a-zA-Z0-9,!?+\- ]+"
+                               data-parsley-pattern-message="Only use letters, numbers, and characters [, ! ? + -]">
                         <small class="form-text text-muted">Separate tags by comma.</small>
-			        </div><!-- form-group -->
-		        </form>
+                    </div><!-- form-group -->
+                </form>
                 <div class="loading hide">
                     <div class="loading-message">
                         <i class="fa fa-spinner fa-spin fa-3x fa-fw"></i>

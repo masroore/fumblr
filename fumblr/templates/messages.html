@@ -1,37 +1,37 @@
 {% extends "layout/base.html" %}
 {% block title %}Messages{% endblock %}
 {% block content %}
-<div id="messages">
-	<div class="message-wrap">
-		<section>
-			{% if not users %}
-			<div class="no-content"><em>There are no messages.</em></div>
-			{% else %}
-				{% for user in users %}
-				<ul class="user-messages hide" data-user="{{ user }}">
-					{% for message in users[user] %}
-					{% include 'component/message.html' %}
-					{% endfor %}
-				</ul><!-- user-messages -->
-				{% endfor %}
-				<div class="message-bar hide">
-					<form action="/message" method="post" class="message-form" enctype="multipart/form-data">
-		        <button type="submit">Send</button>
-		        <span>
+    <div id="messages">
+        <div class="message-wrap">
+            <section>
+                {% if not users %}
+                    <div class="no-content"><em>There are no messages.</em></div>
+                {% else %}
+                    {% for user in users %}
+                        <ul class="user-messages hide" data-user="{{ user }}">
+                            {% for message in users[user] %}
+                                {% include 'component/message.html' %}
+                            {% endfor %}
+                        </ul><!-- user-messages -->
+                    {% endfor %}
+                    <div class="message-bar hide">
+                        <form action="/message" method="post" class="message-form" enctype="multipart/form-data">
+                            <button type="submit">Send</button>
+                            <span>
 		        	<input class="message-text" type="text" name="text" placeholder="Enter a message">
 		        </span>
-	        </form>
-				</div><!-- message-bar -->
-			{% endif %}
-		</section><!-- message-display -->
+                        </form>
+                    </div><!-- message-bar -->
+                {% endif %}
+            </section><!-- message-display -->
 
-		<aside>
-			{% for user in users %}
-			<div class="message-user" data-user="{{ user }}">
-				{{ user }}
-			</div><!-- list-group-item -->
-			{% endfor %}
-		</aside><!-- message-list -->
-	</div><!-- message-wrap -->
-</div><!-- messages -->
+            <aside>
+                {% for user in users %}
+                    <div class="message-user" data-user="{{ user }}">
+                        {{ user }}
+                    </div><!-- list-group-item -->
+                {% endfor %}
+            </aside><!-- message-list -->
+        </div><!-- message-wrap -->
+    </div><!-- messages -->
 {% endblock %}

@@ -1,18 +1,18 @@
 {% extends "layout/base.html" %}
 {% block title %}Post{% endblock %}
 {% block content %}
-<div id="view-post">
-	<div class="container">
-		<h1>{{ post.user.username }}</h1>
+    <div id="view-post">
+        <div class="container">
+            <h1>{{ post.user.username }}</h1>
 
-		{% include "component/post.html" %}
-		
-		{% set likes = post.likes %}
-		{% include "component/post-likes.html" %}
+            {% include "component/post.html" %}
 
-		{% set comments = post.comments %}
-		{% include "component/comments.html" %}
-		
-	</div><!-- container -->
-</div><!-- home -->
+            {% set likes = post.likes %}
+            {% include "component/post-likes.html" %}
+
+            {% set comments = post.comments %}
+            {% include "component/comments.html" %}
+
+        </div><!-- container -->
+    </div><!-- home -->
 {% endblock %}

@@ -1,17 +1,18 @@
 {% extends "layout/base.html" %}
 {% block title %}Dashboard{% endblock %}
 {% block content %}
-<div id="dashboard">
-	<div class="dashboard-wrap">
-		
-		{% include 'component/post-list.html' %}
+    <div id="dashboard">
+        <div class="dashboard-wrap">
 
-		{% if not posts %}
-			<div class="no-content">
-				<p>You don't have any posts, why not <a href="#" class="post-btn">make a post</a> or <a href="{{ url_for('gallery') }}">find someone to follow?</a></p>
-			</div><!-- no-content -->
-		{% endif %}
-		
-	</div><!-- dashboard-wrap -->
-</div><!-- home -->
+            {% include 'component/post-list.html' %}
+
+            {% if not posts %}
+                <div class="no-content">
+                    <p>You don't have any posts, why not <a href="#" class="post-btn">make a post</a> or <a
+                            href="{{ url_for('gallery') }}">find someone to follow?</a></p>
+                </div><!-- no-content -->
+            {% endif %}
+
+        </div><!-- dashboard-wrap -->
+    </div><!-- home -->
 {% endblock %}
