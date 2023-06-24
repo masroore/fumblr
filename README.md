@@ -1,8 +1,6 @@
 # fumblr
 A Tumblr clone written with Python using the Flask server framework.
 
-[Hosted here](https://fumblr.herokuapp.com)
-
 ## Features
 - mobile friendly
 - infinite scroll
